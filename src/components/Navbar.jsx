@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useTheme } from '../context/ThemeContext';
 import { Phone, MapPin, Globe, Menu, X, ArrowUpRight, Sun, Moon } from 'lucide-react';
@@ -6,6 +7,7 @@ import { Phone, MapPin, Globe, Menu, X, ArrowUpRight, Sun, Moon } from 'lucide-r
 export const Navbar = ({ onOpenQuote }) => {
   const { lang, setLang, t } = useLanguage();
   const { theme, toggleTheme, isDark } = useTheme();
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -18,13 +20,13 @@ export const Navbar = ({ onOpenQuote }) => {
   }, []);
 
   const navLinks = [
-    { href: '#home', label: t('nav_home') },
-    { href: '#about', label: t('nav_about') },
-    { href: '#products', label: t('nav_products') },
-    { href: '#services', label: t('nav_services') },
-    { href: '#news', label: t('nav_news') },
-    { href: '#careers', label: t('nav_careers') },
-    { href: '#contacts', label: t('nav_contacts') }
+    { to: '/', label: t('nav_home') },
+    { to: '/about', label: t('nav_about') },
+    { to: '/products', label: t('nav_products') },
+    { to: '/services', label: t('nav_services') },
+    { to: '/news', label: t('nav_news') },
+    { to: '/careers', label: t('nav_careers') },
+    { to: '/contacts', label: t('nav_contacts') }
   ];
 
   return (
@@ -38,7 +40,7 @@ export const Navbar = ({ onOpenQuote }) => {
       }}>
         <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
           {/* Brand Logo */}
-          <a href="#home" style={{ display: 'flex', alignItems: 'center' }}>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
             <img
               src="/images/logo.png"
               alt="Jera Plus"
@@ -49,7 +51,7 @@ export const Navbar = ({ onOpenQuote }) => {
                 transition: 'filter 0.3s'
               }}
             />
-          </a>
+          </Link>
 
           {/* Teaser Contacts (matching webcopy teasers) */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
@@ -187,35 +189,45 @@ export const Navbar = ({ onOpenQuote }) => {
         <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {/* Desktop Nav Items */}
           <nav style={{ display: 'none', gap: '0', alignItems: 'center' }} className="desktop-menu">
-            {navLinks.map((link, idx) => (
-              <a
-                key={link.href}
-                href={link.href}
-                style={{
-                  fontSize: '0.92rem',
-                  fontWeight: '700',
-                  color: '#ffffff',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.04em',
-                  padding: '18px 22px',
-                  borderRight: '1px solid rgba(255, 255, 255, 0.12)',
-                  borderLeft: idx === 0 ? '1px solid rgba(255, 255, 255, 0.12)' : 'none',
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  alignItems: 'center'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = 'var(--nav-link-hover)';
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#ffffff';
-                  e.currentTarget.style.background = 'transparent';
-                }}
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link, idx) => {
+              const isActive = location.pathname === link.to || (link.to !== '/' && location.pathname.startsWith(link.to));
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  style={{
+                    fontSize: '0.92rem',
+                    fontWeight: '700',
+                    color: isActive ? 'var(--hover-accent)' : '#ffffff',
+                    background: isActive ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.04em',
+                    padding: '18px 22px',
+                    borderRight: '1px solid rgba(255, 255, 255, 0.12)',
+                    borderLeft: idx === 0 ? '1px solid rgba(255, 255, 255, 0.12)' : 'none',
+                    borderBottom: isActive ? '3px solid var(--hover-accent)' : '3px solid transparent',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    textDecoration: 'none'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.color = 'var(--nav-link-hover)';
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.color = '#ffffff';
+                      e.currentTarget.style.background = 'transparent';
+                    }
+                  }}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Quick email display on right */}
@@ -257,23 +269,27 @@ export const Navbar = ({ onOpenQuote }) => {
             flexDirection: 'column',
             gap: '12px'
           }}>
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                style={{
-                  fontSize: '0.95rem',
-                  fontWeight: '700',
-                  color: '#ffffff',
-                  padding: '10px 0',
-                  textTransform: 'uppercase',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
-                }}
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) => {
+              const isActive = location.pathname === link.to;
+              return (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  onClick={() => setMobileMenuOpen(false)}
+                  style={{
+                    fontSize: '0.95rem',
+                    fontWeight: '700',
+                    color: isActive ? 'var(--hover-accent)' : '#ffffff',
+                    padding: '10px 0',
+                    textTransform: 'uppercase',
+                    textDecoration: 'none',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
+                  }}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
         )}
       </header>

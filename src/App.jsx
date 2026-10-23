@@ -1,43 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
-import { LanguageProvider, useLanguage } from './context/LanguageContext';
-import { ContentProvider, useContent } from './context/ContentContext';
+import { LanguageProvider } from './context/LanguageContext';
+import { ContentProvider } from './context/ContentContext';
 import { Navbar } from './components/Navbar';
-import { HeroSlider } from './components/HeroSlider';
-import { Advantages } from './components/Advantages';
-import { CompanyOverview } from './components/CompanyOverview';
-import { ProductsSection } from './components/ProductsSection';
-import { ServicesSection } from './components/ServicesSection';
-import { NewsSection } from './components/NewsSection';
-import { CareersSection } from './components/CareersSection';
-import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { ContactModal } from './components/ContactModal';
+
+// Pages
+import { HomePage } from './pages/HomePage';
+import { AboutPage } from './pages/AboutPage';
+import { ProductsPage } from './pages/ProductsPage';
+import { ProductDetailPage } from './pages/ProductDetailPage';
+import { ServicesPage } from './pages/ServicesPage';
+import { ServiceDetailPage } from './pages/ServiceDetailPage';
+import { NewsPage } from './pages/NewsPage';
+import { NewsDetailPage } from './pages/NewsDetailPage';
+import { CareersPage } from './pages/CareersPage';
+import { ContactsPage } from './pages/ContactsPage';
 
 export function AppContent() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTopic, setModalTopic] = useState('');
-  const { lang } = useLanguage();
-  const { content } = useContent();
-
-  // Dynamic SEO meta tag update
-  useEffect(() => {
-    const seo = content?.seo;
-    const title = (lang === 'ru' ? seo?.title_ru : seo?.title_en) ||
-      'Jera Plus | International Petroleum & Commodity Trading';
-    const desc = (lang === 'ru' ? seo?.description_ru : seo?.description_en) ||
-      'Jera Plus is a European trading and logistics company delivering LPG, diesel, base oils, petrochemicals and raw materials.';
-
-    document.title = title;
-
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.name = 'description';
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.content = desc;
-  }, [content?.seo, lang]);
 
   const handleOpenQuote = (topic = '') => {
     setModalTopic(topic);
@@ -45,25 +29,33 @@ export function AppContent() {
   };
 
   return (
-    <div className="app-layout">
-      <Navbar onOpenQuote={() => handleOpenQuote('')} />
-      <main>
-        <HeroSlider onOpenQuote={() => handleOpenQuote('')} />
-        <Advantages />
-        <CompanyOverview />
-        <ProductsSection onSelectProductForQuote={(title) => handleOpenQuote(`Inquiry: ${title}`)} />
-        <ServicesSection onSelectServiceForQuote={(title) => handleOpenQuote(`Service: ${title}`)} />
-        <NewsSection />
-        <CareersSection />
-        <ContactSection initialTopic={modalTopic} />
-      </main>
-      <Footer />
-      <ContactModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        prefilledTopic={modalTopic}
-      />
-    </div>
+    <BrowserRouter>
+      <div className="app-layout">
+        <Navbar onOpenQuote={() => handleOpenQuote('')} />
+        
+        <Routes>
+          <Route path="/" element={<HomePage onOpenQuote={handleOpenQuote} />} />
+          <Route path="/about" element={<AboutPage onOpenQuote={handleOpenQuote} />} />
+          <Route path="/products" element={<ProductsPage onOpenQuote={handleOpenQuote} />} />
+          <Route path="/products/:slug" element={<ProductDetailPage onOpenQuote={handleOpenQuote} />} />
+          <Route path="/services" element={<ServicesPage onOpenQuote={handleOpenQuote} />} />
+          <Route path="/services/:slug" element={<ServiceDetailPage onOpenQuote={handleOpenQuote} />} />
+          <Route path="/news" element={<NewsPage />} />
+          <Route path="/news/:slug" element={<NewsDetailPage />} />
+          <Route path="/careers" element={<CareersPage />} />
+          <Route path="/contacts" element={<ContactsPage />} />
+          {/* Catch-all redirect to Home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+
+        <Footer />
+        <ContactModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          prefilledTopic={modalTopic}
+        />
+      </div>
+    </BrowserRouter>
   );
 }
 

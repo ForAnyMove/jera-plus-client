@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useContent } from '../context/ContentContext';
 import { Newspaper, Calendar, ArrowRight, X } from 'lucide-react';
@@ -54,6 +55,7 @@ export const NewsSection = () => {
           {displayedNews.map((item) => {
             const title = lang === 'ru' ? item.title_ru : item.title_en;
             const excerpt = lang === 'ru' ? item.excerpt_ru : item.excerpt_en;
+            const itemUrl = `/news/${item.slug || item.id}`;
 
             return (
               <article
@@ -64,7 +66,7 @@ export const NewsSection = () => {
                   flexDirection: 'column'
                 }}
               >
-                <div style={{ height: '210px', overflow: 'hidden', position: 'relative' }}>
+                <Link to={itemUrl} style={{ height: '210px', overflow: 'hidden', position: 'relative', display: 'block' }}>
                   <img
                     src={item.image_url || '/images/bn_1.jpg'}
                     alt={title}
@@ -94,53 +96,52 @@ export const NewsSection = () => {
                     <Calendar size={13} color="var(--hover-accent)" />
                     <span>{item.published_at || '2024'}</span>
                   </div>
-                </div>
+                </Link>
 
                 <div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
                   <h3 style={{ fontSize: '1.15rem', marginBottom: '10px', fontWeight: 800, lineHeight: 1.35, color: 'var(--card-light-title)' }}>
-                    {title}
+                    <Link to={itemUrl} style={{ color: 'inherit', textDecoration: 'none' }}>
+                      {title}
+                    </Link>
                   </h3>
                   <p style={{ color: 'var(--text-dark-muted)', fontSize: '0.9rem', lineHeight: 1.6, marginBottom: '20px', flex: 1 }}>
                     {excerpt}
                   </p>
 
-                  <button
-                    onClick={() => setSelectedArticle(item)}
+                  <Link
+                    to={itemUrl}
                     style={{
-                      background: 'none',
-                      border: 'none',
                       color: 'var(--hover-accent)',
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '6px',
                       fontSize: '0.88rem',
                       fontWeight: 700,
-                      cursor: 'pointer',
-                      padding: '4px 0',
+                      textDecoration: 'none',
                       marginTop: 'auto',
                       width: 'fit-content'
                     }}
                   >
                     <span>{t('btn_more')}</span>
                     <ArrowRight size={15} />
-                  </button>
+                  </Link>
                 </div>
               </article>
             );
           })}
         </div>
 
-        {/* Load More Button */}
-        {news.length > visibleCount && (
-          <div style={{ textAlign: 'center' }}>
-            <button
-              onClick={() => setVisibleCount((prev) => Math.min(prev + 6, news.length))}
-              className="btn btn-navy"
-            >
-              {t('btn_all_news')} ({news.length})
-            </button>
-          </div>
-        )}
+        {/* View All News Page CTA */}
+        <div style={{ textAlign: 'center' }}>
+          <Link
+            to="/news"
+            className="btn btn-navy"
+            style={{ padding: '14px 32px', fontSize: '0.95rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+          >
+            <span>{t('btn_all_news')}</span>
+            <ArrowRight size={16} />
+          </Link>
+        </div>
       </div>
 
       {/* Article Modal */}

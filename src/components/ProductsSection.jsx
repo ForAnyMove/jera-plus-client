@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useContent } from '../context/ContentContext';
 import { Droplet, ArrowRight, X, FileText, Send } from 'lucide-react';
@@ -83,6 +84,7 @@ export const ProductsSection = ({ onSelectProductForQuote }) => {
             const title = lang === 'ru' ? p.title_ru : p.title_en;
             const category = lang === 'ru' ? p.category_ru : p.category_en;
             const excerpt = lang === 'ru' ? p.excerpt_ru : p.excerpt_en;
+            const productUrl = `/products/${p.slug || p.id}`;
 
             return (
               <div
@@ -94,7 +96,7 @@ export const ProductsSection = ({ onSelectProductForQuote }) => {
                 }}
               >
                 {/* Image */}
-                <div style={{ position: 'relative', height: '210px', overflow: 'hidden' }}>
+                <Link to={productUrl} style={{ position: 'relative', height: '210px', overflow: 'hidden', display: 'block' }}>
                   <img
                     src={p.image_url || '/images/bn_2.jpg'}
                     alt={title}
@@ -122,26 +124,28 @@ export const ProductsSection = ({ onSelectProductForQuote }) => {
                   }}>
                     {category}
                   </div>
-                </div>
+                </Link>
 
                 {/* Content */}
                 <div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
                   <h3 style={{ fontSize: '1.22rem', marginBottom: '10px', fontWeight: 800, color: 'var(--card-light-title)' }}>
-                    {title}
+                    <Link to={productUrl} style={{ color: 'inherit', textDecoration: 'none' }}>
+                      {title}
+                    </Link>
                   </h3>
                   <p style={{ color: 'var(--text-dark-muted)', fontSize: '0.92rem', lineHeight: 1.6, marginBottom: '20px', flex: 1 }}>
                     {excerpt}
                   </p>
 
                   <div style={{ display: 'flex', gap: '10px', marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid var(--border-light)' }}>
-                    <button
-                      onClick={() => setSelectedProduct(p)}
+                    <Link
+                      to={productUrl}
                       className="btn btn-outline-cyan"
-                      style={{ flex: 1, padding: '10px 16px', fontSize: '0.82rem' }}
+                      style={{ flex: 1, padding: '10px 16px', fontSize: '0.82rem', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                     >
-                      <FileText size={15} />
                       <span>{t('btn_more')}</span>
-                    </button>
+                      <ArrowRight size={14} />
+                    </Link>
 
                     <button
                       onClick={() => onSelectProductForQuote(title)}
@@ -156,6 +160,18 @@ export const ProductsSection = ({ onSelectProductForQuote }) => {
               </div>
             );
           })}
+        </div>
+
+        {/* View All Products CTA */}
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          <Link
+            to="/products"
+            className="btn btn-navy"
+            style={{ padding: '14px 32px', fontSize: '0.95rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+          >
+            <span>{lang === 'ru' ? 'Перейти в полный каталог продукции' : 'Explore Full Products Catalog'}</span>
+            <ArrowRight size={16} />
+          </Link>
         </div>
       </div>
 

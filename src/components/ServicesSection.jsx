@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useContent } from '../context/ContentContext';
 import { Truck, Compass, Building2, Banknote, BarChart3, Briefcase, ArrowRight, CheckCircle, X } from 'lucide-react';
@@ -77,7 +78,9 @@ export const ServicesSection = ({ onSelectServiceForQuote }) => {
                 </div>
 
                 <h3 style={{ fontSize: '1.25rem', marginBottom: '12px', fontWeight: 800, lineHeight: 1.35, color: 'var(--card-light-title)' }}>
-                  {title}
+                  <Link to={`/services/${srv.slug || srv.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                    {title}
+                  </Link>
                 </h3>
 
                 <p style={{ color: 'var(--text-dark-muted)', fontSize: '0.92rem', lineHeight: 1.6, marginBottom: '24px', flex: 1 }}>
@@ -94,7 +97,7 @@ export const ServicesSection = ({ onSelectServiceForQuote }) => {
                       {stages.slice(0, 3).map((st, i) => (
                         <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-dark)', fontSize: '0.84rem' }}>
                           <CheckCircle size={14} color="var(--stage-check-color)" />
-                          <span>{lang === 'ru' ? st.title_ru : st.title_en}</span>
+                          <span>{lang === 'ru' ? (st.title_ru || st.title) : (st.title_en || st.title)}</span>
                         </li>
                       ))}
                     </ul>
@@ -102,13 +105,14 @@ export const ServicesSection = ({ onSelectServiceForQuote }) => {
                 )}
 
                 <div style={{ display: 'flex', gap: '10px', marginTop: 'auto' }}>
-                  <button
-                    onClick={() => setActiveModalService(srv)}
+                  <Link
+                    to={`/services/${srv.slug || srv.id}`}
                     className="btn btn-outline-cyan"
-                    style={{ flex: 1, padding: '10px', fontSize: '0.82rem' }}
+                    style={{ flex: 1, padding: '10px', fontSize: '0.82rem', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                   >
                     <span>{t('btn_more')}</span>
-                  </button>
+                    <ArrowRight size={14} />
+                  </Link>
 
                   <button
                     onClick={() => onSelectServiceForQuote(title)}
@@ -121,6 +125,18 @@ export const ServicesSection = ({ onSelectServiceForQuote }) => {
               </div>
             );
           })}
+        </div>
+
+        {/* Explore All Services CTA */}
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          <Link
+            to="/services"
+            className="btn btn-navy"
+            style={{ padding: '14px 32px', fontSize: '0.95rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+          >
+            <span>{lang === 'ru' ? 'Все услуги и консалтинг' : 'Explore All Services & Advisory'}</span>
+            <ArrowRight size={16} />
+          </Link>
         </div>
       </div>
 

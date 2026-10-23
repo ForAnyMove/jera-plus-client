@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useContent } from '../context/ContentContext';
 import { MapPin, Phone, Mail, ArrowUp, Send, CheckCircle2 } from 'lucide-react';
@@ -221,12 +222,12 @@ export const Footer = () => {
             </h4>
             <div className="section-divider section-divider-cyan" style={{ width: '30px', height: '2px', marginBottom: '16px' }} />
             <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <li><a href="#about" style={{ color: '#c5c8e1' }}>{t('nav_about')}</a></li>
-              <li><a href="#products" style={{ color: '#c5c8e1' }}>{t('nav_products')}</a></li>
-              <li><a href="#services" style={{ color: '#c5c8e1' }}>{t('nav_services')}</a></li>
-              <li><a href="#news" style={{ color: '#c5c8e1' }}>{t('nav_news')}</a></li>
-              <li><a href="#careers" style={{ color: '#c5c8e1' }}>{t('nav_careers')}</a></li>
-              <li><a href="#contacts" style={{ color: '#c5c8e1' }}>{t('nav_contacts')}</a></li>
+              <li><Link to="/about" style={{ color: '#c5c8e1', textDecoration: 'none' }}>{t('nav_about')}</Link></li>
+              <li><Link to="/products" style={{ color: '#c5c8e1', textDecoration: 'none' }}>{t('nav_products')}</Link></li>
+              <li><Link to="/services" style={{ color: '#c5c8e1', textDecoration: 'none' }}>{t('nav_services')}</Link></li>
+              <li><Link to="/news" style={{ color: '#c5c8e1', textDecoration: 'none' }}>{t('nav_news')}</Link></li>
+              <li><Link to="/careers" style={{ color: '#c5c8e1', textDecoration: 'none' }}>{t('nav_careers')}</Link></li>
+              <li><Link to="/contacts" style={{ color: '#c5c8e1', textDecoration: 'none' }}>{t('nav_contacts')}</Link></li>
             </ul>
           </div>
 
@@ -236,14 +237,14 @@ export const Footer = () => {
               {lang === 'ru' ? 'Продукция' : 'Core Commodities'}
             </h4>
             <div className="section-divider section-divider-cyan" style={{ width: '30px', height: '2px', marginBottom: '16px' }} />
-            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', color: '#c5c8e1' }}>
-              <li>LPG (Propane, Butane, Mix)</li>
-              <li>Diesel Fuel (ULSD 10 ppm) & Gasoline</li>
-              <li>Base Oils (SN 150, SN 500)</li>
-              <li>Petrochemical Solvents & Aromatics</li>
-              <li>Plastics & Polymer Resins</li>
-              <li>Flax Seeds (Linseeds)</li>
-              <li>Minerals (Rutile & Ilmenite)</li>
+            <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <li><Link to="/products/lpg" style={{ color: '#c5c8e1', textDecoration: 'none' }}>LPG (Propane, Butane, Mix)</Link></li>
+              <li><Link to="/products/diesel-fuel" style={{ color: '#c5c8e1', textDecoration: 'none' }}>Diesel Fuel (ULSD 10 ppm) & Gasoline</Link></li>
+              <li><Link to="/products/base-oils" style={{ color: '#c5c8e1', textDecoration: 'none' }}>Base Oils (SN 150, SN 500)</Link></li>
+              <li><Link to="/products/petrochemicals" style={{ color: '#c5c8e1', textDecoration: 'none' }}>Petrochemical Solvents & Aromatics</Link></li>
+              <li><Link to="/products/polymers" style={{ color: '#c5c8e1', textDecoration: 'none' }}>Plastics & Polymer Resins</Link></li>
+              <li><Link to="/products/flax-seeds" style={{ color: '#c5c8e1', textDecoration: 'none' }}>Flax Seeds (Linseeds)</Link></li>
+              <li><Link to="/products/minerals" style={{ color: '#c5c8e1', textDecoration: 'none' }}>Minerals (Rutile & Ilmenite)</Link></li>
             </ul>
           </div>
 
