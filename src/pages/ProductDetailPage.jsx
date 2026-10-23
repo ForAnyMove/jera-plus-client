@@ -222,10 +222,10 @@ export const ProductDetailPage = ({ onOpenQuote }) => {
                         {specs.map((spec, i) => (
                           <tr key={i} style={{ borderBottom: '1px solid var(--border-light)', background: i % 2 === 0 ? 'transparent' : 'var(--bg-subtle)' }}>
                             <td style={{ padding: '12px 20px', fontWeight: 600, color: 'var(--card-light-title)', width: '50%' }}>
-                              {lang === 'ru' ? (spec.param_ru || spec.param) : (spec.param_en || spec.param)}
+                              {lang === 'ru' ? (spec.param_ru || spec.name_ru || spec.param || spec.name) : (spec.param_en || spec.name_en || spec.param || spec.name)}
                             </td>
                             <td style={{ padding: '12px 20px', color: 'var(--text-dark-muted)', fontWeight: 700 }}>
-                              {lang === 'ru' ? (spec.val_ru || spec.value) : (spec.val_en || spec.value)}
+                              {lang === 'ru' ? (spec.val_ru || spec.value_ru || spec.val || spec.value) : (spec.val_en || spec.value_en || spec.val || spec.value)}
                             </td>
                           </tr>
                         ))}
